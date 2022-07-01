@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-07-01 Fri 18:45 -->
+<!-- 2022-07-01 Fri 19:05 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Getting Stock Data</title>
@@ -15,6 +15,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/lib/js/jquery.stickytableheaders.min.js"></script>
 <script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/readtheorg.js"></script>
+<style>pre.src{background:#343131;color:white;} </style>
 </head>
 <body>
 <div id="content" class="content">
@@ -23,23 +24,22 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org2924003">1. Yahoo Finance</a></li>
-<li><a href="#org2a341df">2. Interactive Brokers Python API</a></li>
+<li><a href="#org90335ad">1. Yahoo Finance</a></li>
+<li><a href="#org9afdd57">2. Interactive Brokers Python API</a></li>
 </ul>
 </div>
 </div>
 
 
-
-<div id="outline-container-org2924003" class="outline-2">
-<h2 id="org2924003"><span class="section-number-2">1.</span> Yahoo Finance</h2>
+<div id="outline-container-org90335ad" class="outline-2">
+<h2 id="org90335ad"><span class="section-number-2">1.</span> Yahoo Finance</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 The following code will download stock price data for &lt;code&gt;SPY AAPL COIN XLK&lt;/code&gt;, convert the prices into returns using the Adjusted Close, and write the data to a csv file in your working directory.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python" id="org40803f7"><span style="color: #00ffff; font-weight: bold;">import</span> yfinance <span style="color: #00ffff; font-weight: bold;">as</span> yf
+<pre class="src src-python" id="org6f8028b"><span style="color: #00ffff; font-weight: bold;">import</span> yfinance <span style="color: #00ffff; font-weight: bold;">as</span> yf
 
 <span style="color: #ffff00;">data</span> = yf.download(<span style="color: #00ff00;">"SPY AAPL COIN XLK"</span>, start=<span style="color: #00ff00;">"2022-01-01"</span>, end=<span style="color: #00ff00;">"2022-07-01"</span>)
 adj_close = data[<span style="color: #00ff00;">"Adj Close"</span>]
@@ -54,11 +54,11 @@ returns.to_csv(<span style="color: #00ff00;">"returns.csv"</span>)
 
 
 
-<div id="outline-container-org2a341df" class="outline-2">
-<h2 id="org2a341df"><span class="section-number-2">2.</span> Interactive Brokers Python API</h2>
+<div id="outline-container-org9afdd57" class="outline-2">
+<h2 id="org9afdd57"><span class="section-number-2">2.</span> Interactive Brokers Python API</h2>
 <div class="outline-text-2" id="text-2">
 <div class="org-src-container">
-<pre class="src src-python" id="org6b856b8"><span style="color: #00ffff; font-weight: bold;">import</span> pandas <span style="color: #00ffff; font-weight: bold;">as</span> pd
+<pre class="src src-python" id="org59d9f0e"><span style="color: #00ffff; font-weight: bold;">import</span> pandas <span style="color: #00ffff; font-weight: bold;">as</span> pd
 <span style="color: #00ffff; font-weight: bold;">import</span> seaborn <span style="color: #00ffff; font-weight: bold;">as</span> sns
 <span style="color: #ff0000;">#</span><span style="color: #ff0000;">import matplotlib as plt</span>
 <span style="color: #00ffff; font-weight: bold;">import</span> matplotlib.pyplot <span style="color: #00ffff; font-weight: bold;">as</span> plt
@@ -103,7 +103,7 @@ returns.columns = [<span style="color: #00ff00;">"spy"</span>, <span style="colo
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Matt Brigida, Ph.D.</p>
-<p class="date">Created: 2022-07-01 Fri 18:45</p>
+<p class="date">Created: 2022-07-01 Fri 19:05</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
