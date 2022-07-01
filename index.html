@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-07-01 Fri 19:05 -->
+<!-- 2022-07-01 Fri 19:09 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Getting Stock Data</title>
@@ -24,27 +24,27 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org90335ad">1. Yahoo Finance</a></li>
-<li><a href="#org9afdd57">2. Interactive Brokers Python API</a></li>
+<li><a href="#org5ec28a1">1. Yahoo Finance</a></li>
+<li><a href="#org782f6d5">2. Interactive Brokers Python API</a></li>
 </ul>
 </div>
 </div>
 
 
-<div id="outline-container-org90335ad" class="outline-2">
-<h2 id="org90335ad"><span class="section-number-2">1.</span> Yahoo Finance</h2>
+<div id="outline-container-org5ec28a1" class="outline-2">
+<h2 id="org5ec28a1"><span class="section-number-2">1.</span> Yahoo Finance</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 The following code will download stock price data for &lt;code&gt;SPY AAPL COIN XLK&lt;/code&gt;, convert the prices into returns using the Adjusted Close, and write the data to a csv file in your working directory.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python" id="org6f8028b"><span style="color: #00ffff; font-weight: bold;">import</span> yfinance <span style="color: #00ffff; font-weight: bold;">as</span> yf
+<pre class="src src-python" id="orgeb1c857"><span style="color: #51afef;">import</span> yfinance <span style="color: #51afef;">as</span> yf
 
-<span style="color: #ffff00;">data</span> = yf.download(<span style="color: #00ff00;">"SPY AAPL COIN XLK"</span>, start=<span style="color: #00ff00;">"2022-01-01"</span>, end=<span style="color: #00ff00;">"2022-07-01"</span>)
-adj_close = data[<span style="color: #00ff00;">"Adj Close"</span>]
-returns = adj_close.pct_change()[-1]
-returns.to_csv(<span style="color: #00ff00;">"returns.csv"</span>)
+<span style="color: #dcaeea;">data</span> = yf.download(<span style="color: #98be65;">"SPY AAPL COIN XLK"</span>, start=<span style="color: #98be65;">"2022-01-01"</span>, end=<span style="color: #98be65;">"2022-07-01"</span>)
+adj_close = data[<span style="color: #98be65;">"Adj Close"</span>]
+returns = adj_close.pct_change()[1:]
+returns.to_csv(<span style="color: #98be65;">"returns.csv"</span>)
 </pre>
 </div>
 </div>
@@ -54,48 +54,48 @@ returns.to_csv(<span style="color: #00ff00;">"returns.csv"</span>)
 
 
 
-<div id="outline-container-org9afdd57" class="outline-2">
-<h2 id="org9afdd57"><span class="section-number-2">2.</span> Interactive Brokers Python API</h2>
+<div id="outline-container-org782f6d5" class="outline-2">
+<h2 id="org782f6d5"><span class="section-number-2">2.</span> Interactive Brokers Python API</h2>
 <div class="outline-text-2" id="text-2">
 <div class="org-src-container">
-<pre class="src src-python" id="org59d9f0e"><span style="color: #00ffff; font-weight: bold;">import</span> pandas <span style="color: #00ffff; font-weight: bold;">as</span> pd
-<span style="color: #00ffff; font-weight: bold;">import</span> seaborn <span style="color: #00ffff; font-weight: bold;">as</span> sns
-<span style="color: #ff0000;">#</span><span style="color: #ff0000;">import matplotlib as plt</span>
-<span style="color: #00ffff; font-weight: bold;">import</span> matplotlib.pyplot <span style="color: #00ffff; font-weight: bold;">as</span> plt
-<span style="color: #00ffff; font-weight: bold;">import</span> numpy <span style="color: #00ffff; font-weight: bold;">as</span> np
+<pre class="src src-python" id="org3ff5a3e"><span style="color: #51afef;">import</span> pandas <span style="color: #51afef;">as</span> pd
+<span style="color: #51afef;">import</span> seaborn <span style="color: #51afef;">as</span> sns
+<span style="color: #5B6268;">#</span><span style="color: #5B6268;">import matplotlib as plt</span>
+<span style="color: #51afef;">import</span> matplotlib.pyplot <span style="color: #51afef;">as</span> plt
+<span style="color: #51afef;">import</span> numpy <span style="color: #51afef;">as</span> np
 
-<span style="color: #00ffff; font-weight: bold;">import</span> ib_insync <span style="color: #00ffff; font-weight: bold;">as</span> ib
-<span style="color: #00ffff; font-weight: bold;">from</span> ib_insync <span style="color: #00ffff; font-weight: bold;">import</span> *
-<span style="color: #00ffff; font-weight: bold;">import</span> time
+<span style="color: #51afef;">import</span> ib_insync <span style="color: #51afef;">as</span> ib
+<span style="color: #51afef;">from</span> ib_insync <span style="color: #51afef;">import</span> *
+<span style="color: #51afef;">import</span> time
 
-<span style="color: #ffff00;">ib</span> = IB()
+<span style="color: #dcaeea;">ib</span> = IB()
 
-<span style="color: #ff0000;">#</span><span style="color: #ff0000;">util.startLoop()</span>
+<span style="color: #5B6268;">#</span><span style="color: #5B6268;">util.startLoop()</span>
 
-<span style="color: #ff0000;">## </span><span style="color: #ff0000;">TWS is on 7496</span>
-<span style="color: #ff0000;">## </span><span style="color: #ff0000;">Gateway on 4002</span>
-ib.connect(<span style="color: #00ff00;">'127.0.0.1'</span>, 4002, clientId=1)
+<span style="color: #5B6268;">## </span><span style="color: #5B6268;">TWS is on 7496</span>
+<span style="color: #5B6268;">## </span><span style="color: #5B6268;">Gateway on 4002</span>
+ib.connect(<span style="color: #98be65;">'127.0.0.1'</span>, 4002, clientId=1)
 
-spy = Stock(<span style="color: #00ff00;">"SPY"</span>, <span style="color: #00ff00;">"SMART"</span>, <span style="color: #00ff00;">"USD"</span>)
-target_stock = Stock(<span style="color: #00ff00;">"XLE"</span>, <span style="color: #00ff00;">"SMART"</span>, <span style="color: #00ff00;">"USD"</span>)
+spy = Stock(<span style="color: #98be65;">"SPY"</span>, <span style="color: #98be65;">"SMART"</span>, <span style="color: #98be65;">"USD"</span>)
+target_stock = Stock(<span style="color: #98be65;">"XLE"</span>, <span style="color: #98be65;">"SMART"</span>, <span style="color: #98be65;">"USD"</span>)
 
-spy_data = ib.reqHistoricalData(spy, endDateTime=<span style="color: #00ff00;">''</span>, durationStr=<span style="color: #00ff00;">'252 D'</span>, barSizeSetting=<span style="color: #00ff00;">'1 day'</span>, whatToShow=<span style="color: #00ff00;">'TRADES'</span>, useRTH=<span style="color: #ff00ff;">True</span>, formatDate=1, keepUpToDate=<span style="color: #ff00ff;">False</span>,chartOptions=<span style="color: #ff00ff;">None</span>)
+spy_data = ib.reqHistoricalData(spy, endDateTime=<span style="color: #98be65;">''</span>, durationStr=<span style="color: #98be65;">'252 D'</span>, barSizeSetting=<span style="color: #98be65;">'1 day'</span>, whatToShow=<span style="color: #98be65;">'TRADES'</span>, useRTH=<span style="color: #a9a1e1;">True</span>, formatDate=1, keepUpToDate=<span style="color: #a9a1e1;">False</span>,chartOptions=<span style="color: #a9a1e1;">None</span>)
 spy_data = util.df(spy_data)
-spy_data[<span style="color: #00ff00;">"date"</span>] = pd.to_datetime(spy_data[<span style="color: #00ff00;">"date"</span>])
-spy_data.set_index(<span style="color: #00ff00;">'date'</span>, inplace=<span style="color: #ff00ff;">True</span>)
-spy_returns = spy_data[<span style="color: #00ff00;">'close'</span>].pct_change()[1:]
+spy_data[<span style="color: #98be65;">"date"</span>] = pd.to_datetime(spy_data[<span style="color: #98be65;">"date"</span>])
+spy_data.set_index(<span style="color: #98be65;">'date'</span>, inplace=<span style="color: #a9a1e1;">True</span>)
+spy_returns = spy_data[<span style="color: #98be65;">'close'</span>].pct_change()[1:]
 
 time.sleep(10)
 
-target_stock_data = ib.reqHistoricalData(target_stock, endDateTime=<span style="color: #00ff00;">''</span>, durationStr=<span style="color: #00ff00;">'252 D'</span>, barSizeSetting=<span style="color: #00ff00;">'1 day'</span>, whatToShow=<span style="color: #00ff00;">'TRADES'</span>, useRTH=<span style="color: #ff00ff;">True</span>, formatDate=1, keepUpToDate=<span style="color: #ff00ff;">False</span>,chartOptions=<span style="color: #ff00ff;">None</span>)
+target_stock_data = ib.reqHistoricalData(target_stock, endDateTime=<span style="color: #98be65;">''</span>, durationStr=<span style="color: #98be65;">'252 D'</span>, barSizeSetting=<span style="color: #98be65;">'1 day'</span>, whatToShow=<span style="color: #98be65;">'TRADES'</span>, useRTH=<span style="color: #a9a1e1;">True</span>, formatDate=1, keepUpToDate=<span style="color: #a9a1e1;">False</span>,chartOptions=<span style="color: #a9a1e1;">None</span>)
 target_stock_data = util.df(target_stock_data)
-target_stock_data[<span style="color: #00ff00;">"date"</span>] = pd.to_datetime(target_stock_data[<span style="color: #00ff00;">"date"</span>])
-target_stock_data.set_index(<span style="color: #00ff00;">'date'</span>, inplace=<span style="color: #ff00ff;">True</span>)
-target_stock_returns = target_stock_data[<span style="color: #00ff00;">'close'</span>].pct_change()[1:]
+target_stock_data[<span style="color: #98be65;">"date"</span>] = pd.to_datetime(target_stock_data[<span style="color: #98be65;">"date"</span>])
+target_stock_data.set_index(<span style="color: #98be65;">'date'</span>, inplace=<span style="color: #a9a1e1;">True</span>)
+target_stock_returns = target_stock_data[<span style="color: #98be65;">'close'</span>].pct_change()[1:]
 
 
-returns = pd.merge(spy_returns, target_stock_returns, on = <span style="color: #00ff00;">'date'</span>)
-returns.columns = [<span style="color: #00ff00;">"spy"</span>, <span style="color: #00ff00;">"target"</span>]
+returns = pd.merge(spy_returns, target_stock_returns, on = <span style="color: #98be65;">'date'</span>)
+returns.columns = [<span style="color: #98be65;">"spy"</span>, <span style="color: #98be65;">"target"</span>]
 </pre>
 </div>
 </div>
@@ -103,7 +103,7 @@ returns.columns = [<span style="color: #00ff00;">"spy"</span>, <span style="colo
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Matt Brigida, Ph.D.</p>
-<p class="date">Created: 2022-07-01 Fri 19:05</p>
+<p class="date">Created: 2022-07-01 Fri 19:09</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
