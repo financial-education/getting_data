@@ -1,0 +1,75 @@
+#+title: Getting Stock Data
+#+author: Matt Brigida, Ph.D.
+#+email: matthew.brigida@sunypoly.edu
+#+PROPERTY: header-args :eval no
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
+
+
+
+* Yahoo Finance
+
+The following code will download stock price data for <code>SPY AAPL COIN XLK</code>, convert the prices into returns using the Adjusted Close, and write the data to a csv file in your working directory.
+
+#+name: python_yahoo
+#+BEGIN_SRC python :exports both :session *yf*
+import yfinance as yf
+
+data = yf.download("SPY AAPL COIN XLK", start="2022-01-01", end="2022-07-01")
+adj_close = data["Adj Close"]
+returns = adj_close.pct_change()[-1]
+returns.to_csv("returns.csv")
+#+end_src
+
+#+RESULTS: python_yahoo
+
+
+
+
+
+* Interactive Brokers Python API
+
+#+name: get_data
+#+BEGIN_SRC python :exports both :session *index*
+import pandas as pd
+import seaborn as sns
+#import matplotlib as plt
+import matplotlib.pyplot as plt
+import numpy as np
+
+import ib_insync as ib
+from ib_insync import *
+import time
+
+ib = IB()
+
+#util.startLoop()
+
+## TWS is on 7496
+## Gateway on 4002
+ib.connect('127.0.0.1', 4002, clientId=1)
+
+spy = Stock("SPY", "SMART", "USD")
+target_stock = Stock("XLE", "SMART", "USD")
+
+spy_data = ib.reqHistoricalData(spy, endDateTime='', durationStr='252 D', barSizeSetting='1 day', whatToShow='TRADES', useRTH=True, formatDate=1, keepUpToDate=False,chartOptions=None)
+spy_data = util.df(spy_data)
+spy_data["date"] = pd.to_datetime(spy_data["date"])
+spy_data.set_index('date', inplace=True)
+spy_returns = spy_data['close'].pct_change()[1:]
+
+time.sleep(10)
+
+target_stock_data = ib.reqHistoricalData(target_stock, endDateTime='', durationStr='252 D', barSizeSetting='1 day', whatToShow='TRADES', useRTH=True, formatDate=1, keepUpToDate=False,chartOptions=None)
+target_stock_data = util.df(target_stock_data)
+target_stock_data["date"] = pd.to_datetime(target_stock_data["date"])
+target_stock_data.set_index('date', inplace=True)
+target_stock_returns = target_stock_data['close'].pct_change()[1:]
+
+
+returns = pd.merge(spy_returns, target_stock_returns, on = 'date')
+returns.columns = ["spy", "target"]
+#+END_SRC
+
+#+RESULTS[2abbf505f38845beea9dc79b763c465d61ac7e7e]: get_data
+
+
